@@ -112,7 +112,7 @@ def get_historical_prices(stock_code):
 
     # Fetch historical data using yfinance
     data = yf.download(stock_code + ".IS", start=start_date, end=end_date, progress=False)
-    data.index = data.index.tz_localize("UTC")
+    data.index = pd.to_datetime(data.index).tz_localize('UTC')
 
     return data['Close']
 
