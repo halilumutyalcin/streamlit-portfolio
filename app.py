@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from datetime import datetime, timedelta
 import yfinance as yf
+from tradingview_ta import TA_Handler, Interval
 
 st.title("Hisse Fiyatları Analiz Uygulaması")
 
@@ -73,6 +74,18 @@ def get_stock_data(stock_code):
 
     return df
 
+def get_stock_data2(stock):
+    info = TA_Handler(
+    symbol=stock,
+    screener="turkey",
+    exchange="BIST",
+    interval=Interval.INTERVAL_1_DAY,
+)
+    return pd.DataFrame(
+        columns=['Stock', 'Open', 'High', 'Low', 'Close', 'Change'],
+        data=[[stock, info.get_indicators()['open'], info.get_indicators()['high'], info.get_indicators()['low'],
+               info.get_indicators()['close'], info.get_indicators()['change']]]
+    )
 
 def get_position_days(alım_tarihi):
     alım_tarihi = datetime.strptime(alım_tarihi, "%Y-%m-%d")
@@ -124,102 +137,6 @@ def load_user_data():
         profiles = {}
     return profiles
 
-# if username != 'genel':
-#     st.success(f"Hoş Geldiniz {username}!")
-#
-#     # Display accessible stocks for the authenticated user
-#     accessible_stocks = profiles[username]['AccessibleStocks']
-#     # Remove the stock selection
-#     # selected_stocks = st.multiselect("Hisse Kodlarını Seçin", accessible_stocks)
-#
-#     # If there are accessible stocks, fetch and display the trade information
-#     if accessible_stocks:
-#         trades_df = profiles[username]['Trades'].loc[profiles[username]['Trades']['Hisse'].isin(accessible_stocks)]
-#         trades_df['Pozisyon Günü'] = trades_df['Alım Tarihi'].apply(get_position_days)
-#
-#         trades_df['Güncel Fiyat'] = trades_df.apply(
-#             lambda row: round(float(get_stock_data(row['Hisse'])['Son İşlem Fiyatı'][0][1:].replace(",", ".")), 2),
-#             axis=1,
-#         )
-#
-#         trades_df['Tutar'] = trades_df.apply(
-#             lambda row: calculate_current_value(
-#                 row['Ort. Maliyet'],
-#                 row['Adet'],
-#                 round(float(get_stock_data(row['Hisse'])['Son İşlem Fiyatı'][0][1:].replace(",", ".")), 2)
-#             ),
-#             axis=1,
-#         )
-#
-#         total_portfolio_value = trades_df['Tutar'].sum()
-#
-#         trades_df['Yüzde'] = (trades_df['Tutar'] / total_portfolio_value) * 100
-#
-#         trades_df = trades_df.sort_values(by='Tutar', ascending=False)
-#
-#         total_cost = (trades_df['Ort. Maliyet'] * trades_df['Adet']).sum()
-#         total_value = trades_df['Tutar'].sum()
-#         gain = total_value - total_cost
-#         percentage_gain = (gain / total_cost) * 100
-#
-#         # st.subheader("Durum")
-#         # st.text("Toplam Maliyet: {:.2f}".format(total_cost))
-#         # st.text("Toplam Tutar: {:.2f}".format(total_value))
-#         # st.text("Kazanç: {:.2f}".format(gain))
-#         # st.text("Yüzde Kazanç: {:.2f}%".format(percentage_gain))
-#         # Display the data
-#         st.subheader("Hisse Bilgileri")
-#         st.dataframe(trades_df)
-#         # Create a bar chart for portfolio distribution
-#         st.subheader("Portföy Dağılımı (%)")
-#         st.bar_chart(trades_df.set_index('Hisse')['Yüzde'])
-#         portfolio_distribution_text = """
-# Portföy Dağılımı (%):
-# {}
-#
-# Toplam Maliyet: {:.2f}
-# Toplam Tutar: {:.2f}
-# Kazanç: {:.2f}
-# Yüzde Kazanç: {:.2f}%
-# """.format(trades_df[['Hisse', 'Yüzde']].set_index('Hisse').to_string(),total_cost, total_value, gain, percentage_gain)
-#         st.text(portfolio_distribution_text)
-#
-#
-# else:
-#     selected_stocks = st.multiselect("Hisse Kodlarını Seçin", liste_guncelle().index)
-#     # # Eğer kullanıcı bir hisse seçtiyse devam et
-#     if selected_stocks:
-#         result_df = pd.DataFrame(
-#             columns=['Hisse Kodu', 'Açılış Fiyatı', 'Son İşlem Fiyatı', 'Günlük Değişim (TL)', 'Günlük Değişim %',
-#                      'Haftalık En Düşük', 'Haftalık En Yüksek', 'Aylık En Düşük', 'Aylık En Yüksek', 'Alış', 'Satış',
-#                      'Sermaye'])
-#
-#         for s in selected_stocks:
-#             result_df = pd.concat([result_df, get_stock_data(s)], ignore_index=True)
-#
-#         st.subheader("Seçilen Hisse Fiyatları ve Son 1 Ay Kapanış Fiyatları")
-#
-#         # Display real-time stock data
-#         st.dataframe(result_df.drop(
-#             ['Satış', 'Piyasa Değeri', 'Yabancı Oranı (%)', 'Alış', 'Sermaye', 'Aylık En Yüksek', 'Haftalık En Yüksek',
-#              'Haftalık En Düşük', 'Aylık En Düşük'], axis=1))
-#
-#         historical_data = {}
-#
-#         for s in selected_stocks:
-#             historical_data[s] = get_historical_prices(s)
-#
-#         # Create a line chart using Streamlit
-#         st.subheader("Son 1 Ay Kapanış Fiyatları")
-#
-#         # Create a DataFrame to hold historical prices
-#         historical_prices_df = pd.DataFrame(historical_data)
-#
-#         # Plot all selected stocks on a single line chart
-#         st.line_chart(historical_prices_df)
-#     else:
-#         st.warning("Lütfen en az bir hisse seçin.")
-
 selected_page = st.sidebar.radio("Sayfa Seç", ["Hisse Al", "Hisse Görüntüle"],index=1)
 profiles = load_user_data()
 
@@ -265,10 +182,12 @@ elif selected_page == "Hisse Görüntüle":
             trades_df = pd.DataFrame(profiles[username]['Trades'])
 
             trades_df['Pozisyon Günü'] = trades_df['Alım Tarihi'].apply(get_position_days)
-            print(trades_df.columns)
-            print(get_stock_data("ENSRI").columns)
+            # print(trades_df.columns)
+            # print(get_stock_data("ENSRI").columns)
             trades_df['Güncel Fiyat'] = trades_df.apply(
-                lambda row: round(float(get_stock_data(row['Hisse'])['Son İşlem Fiyatı'][0][1:].replace(",", ".")), 2),
+                lambda row:
+                    float(get_stock_data2(row['Hisse'])['Close']
+                ),
                 axis=1,
             )
 
@@ -276,17 +195,19 @@ elif selected_page == "Hisse Görüntüle":
                 lambda row: calculate_current_value(
                     row['Ort. Maliyet'],
                     row['Adet'],
-                    round(float(get_stock_data(row['Hisse'])['Son İşlem Fiyatı'][0][1:].replace(",", ".")), 2)
+
+                        float(get_stock_data2(row['Hisse'])['Close'])
+
                 ),
                 axis=1,
             )
-
 
             total_portfolio_value = trades_df['Tutar'].sum()
 
             trades_df['Yüzde'] = (trades_df['Tutar'] / total_portfolio_value) * 100
 
-            trades_df['Yüzde Kazanç'] = ((trades_df['Güncel Fiyat'] * trades_df['Adet']) - trades_df['Tutar']) / trades_df['Tutar'] * 100
+            trades_df['Yüzde Kazanç'] = ((trades_df['Güncel Fiyat'] - trades_df['Ort. Maliyet']) / trades_df[
+                'Ort. Maliyet']) * 100
 
             trades_df = trades_df.sort_values(by='Tutar', ascending=False)
 
@@ -297,37 +218,49 @@ elif selected_page == "Hisse Görüntüle":
 
             st.subheader("Hisse Bilgileri")
             trades_df = trades_df.reset_index(drop=True)
-            st.dataframe(trades_df)
+            st.dataframe(trades_df.drop(['Yüzde'],axis=1))
             st.subheader("Portföy Dağılımı (%)")
             st.bar_chart(trades_df.set_index('Hisse')['Yüzde'])
-            portfolio_distribution_text = """
-Portföy Dağılımı (%):
-{}
 
-Toplam Maliyet: {:.2f}
-Toplam Tutar: {:.2f}
-Kazanç: {:.2f}
-Yüzde Kazanç: {:.2f}%
-            """.format(trades_df[['Hisse', 'Yüzde']].set_index('Hisse').to_string(), total_cost, total_value, gain,
-                         percentage_gain)
-            st.text(portfolio_distribution_text)
+            additional_info_df = pd.DataFrame({
+                'Bilgi': ['Toplam Maliyet', 'Toplam Tutar', 'Kazanç', 'Yüzde Kazanç'],
+                'Değer': [total_cost, total_value, gain, percentage_gain]
+            })
+
+            # Format the numeric values in the additional_info_df DataFrame
+            additional_info_df['Değer'] = additional_info_df['Değer'].apply(
+                lambda x: '{:,.2f}'.format(x).replace(",", "").replace(".", ",")
+            )
+
+            # Display the 'Portföy Dağılımı' table (if trades_df is available)
+            if 'Hisse' in trades_df.columns and 'Yüzde' in trades_df.columns:
+                st.table(trades_df[['Hisse', 'Yüzde']].set_index('Hisse').style.format({'Yüzde': '{:.2f}%'}))
+
+            # Display the table for additional information
+            st.table(additional_info_df.set_index('Bilgi'))
+
+            # Display the 'Portföy Dağılımı' table (if trades_df is available)
+
+            # Display the additional information
+            # st.text(portfolio_distribution_text)
+
     else:
         selected_stocks = st.multiselect("Hisse Kodlarını Seçin", liste_guncelle().index)
 
         if selected_stocks:
             result_df = pd.DataFrame(
-                columns=['Hisse Kodu', 'Açılış Fiyatı', 'Son İşlem Fiyatı', 'Günlük Değişim (TL)', 'Günlük Değişim %',
-                         'Haftalık En Düşük', 'Haftalık En Yüksek', 'Aylık En Düşük', 'Aylık En Yüksek', 'Alış', 'Satış',
-                         'Sermaye'])
+                columns=['Stock','Open','High','Low','Close','Change'])
 
             for s in selected_stocks:
-                result_df = pd.concat([result_df, get_stock_data(s)], ignore_index=True)
+                result_df = pd.concat([result_df, get_stock_data2(s)], ignore_index=True)
 
             st.subheader("Seçilen Hisse Fiyatları ve Son 1 Ay Kapanış Fiyatları")
 
-            st.dataframe(result_df.drop(
-                ['Satış', 'Piyasa Değeri', 'Yabancı Oranı (%)', 'Alış', 'Sermaye', 'Aylık En Yüksek', 'Haftalık En Yüksek',
-                 'Haftalık En Düşük', 'Aylık En Düşük'], axis=1))
+            # st.dataframe(result_df.drop(
+            #     ['Satış', 'Piyasa Değeri', 'Yabancı Oranı (%)', 'Alış', 'Sermaye', 'Aylık En Yüksek', 'Haftalık En Yüksek',
+            #      'Haftalık En Düşük', 'Aylık En Düşük'], axis=1))
+
+            st.dataframe(result_df)
 
             historical_data = {}
 

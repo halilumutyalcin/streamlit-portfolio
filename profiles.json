@@ -1,55 +1,27 @@
 {
     "Umut": {
         "AccessibleStocks": [
-            "ISMEN",
-            "PETKM",
-            "ENSRI"
+            "RTALB"
         ],
         "Trades": [
             {
-                "Hisse": "ISMEN",
-                "Alım Tarihi": "2023-01-01",
-                "Ort. Maliyet": 18,
-                "Adet": 100
-            },
-            {
-                "Hisse": "PETKM",
-                "Alım Tarihi": "2023-02-01",
-                "Ort. Maliyet": 25,
-                "Adet": 50
-            },
-            {
-                "Hisse": "ENSRI",
+                "Hisse": "RTALB",
                 "Alım Tarihi": "2023-11-17",
-                "Ort. Maliyet": 10.0,
-                "Adet": 100
+                "Ort. Maliyet": 12.75,
+                "Adet": 150
             }
         ]
     },
     "Hakan": {
         "AccessibleStocks": [
-            "KERVN",
-            "THYAO",
-            "DZGYO"
+            "TABGD"
         ],
         "Trades": [
             {
-                "Hisse": "KERVN",
-                "Alım Tarihi": "2023-03-01",
-                "Ort. Maliyet": 35,
-                "Adet": 75
-            },
-            {
-                "Hisse": "THYAO",
-                "Alım Tarihi": "2023-04-01",
-                "Ort. Maliyet": 45,
-                "Adet": 60
-            },
-            {
-                "Hisse": "DZGYO",
-                "Alım Tarihi": "2023-11-17",
-                "Ort. Maliyet": 0.02,
-                "Adet": 4
+                "Hisse": "TABGD",
+                "Alım Tarihi": "2023-10-31",
+                "Ort. Maliyet": 184.2,
+                "Adet": 118
             }
         ]
     }
