@@ -220,7 +220,7 @@ def load_user_data():
 #     else:
 #         st.warning("Lütfen en az bir hisse seçin.")
 
-selected_page = st.sidebar.radio("Sayfa Seç", ["Hisse Al", "Hisse Görüntüle"])
+selected_page = st.sidebar.radio("Sayfa Seç", ["Hisse Al", "Hisse Görüntüle"],index=1)
 profiles = load_user_data()
 
 
