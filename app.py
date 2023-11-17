@@ -265,7 +265,8 @@ elif selected_page == "Hisse Görüntüle":
             trades_df = pd.DataFrame(profiles[username]['Trades'])
 
             trades_df['Pozisyon Günü'] = trades_df['Alım Tarihi'].apply(get_position_days)
-
+            print(trades_df.columns)
+            print(get_stock_data("ENSRI").columns)
             trades_df['Güncel Fiyat'] = trades_df.apply(
                 lambda row: round(float(get_stock_data(row['Hisse'])['Son İşlem Fiyatı'][0][1:].replace(",", ".")), 2),
                 axis=1,
