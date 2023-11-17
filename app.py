@@ -256,7 +256,7 @@ if selected_page == "Hisse Al":
         st.text("Genel profilinde sadece hisse görüntüleytebilirsiniz!")
 
 elif selected_page == "Hisse Görüntüle":
-    if username != 'genel':
+    if username != 'Genel':
         st.success(f"Hoş Geldiniz {username}!")
 
         accessible_stocks = profiles[username]['AccessibleStocks']
