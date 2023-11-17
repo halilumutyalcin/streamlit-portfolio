@@ -225,7 +225,7 @@ profiles = load_user_data()
 
 
 if selected_page == "Hisse Al":
-    if 'genel' != username:
+    if 'Genel' != username:
         st.success(f"Hoş Geldiniz {username}!")
 
         st.subheader("Hisse Alım Bilgileri")
