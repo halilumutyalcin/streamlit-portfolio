@@ -28,9 +28,7 @@
     },
     "Hakan": {
         "AccessibleStocks": [
-            "TABGD",
-            "EKOS",
-            "BINHO"
+            "TABGD"
         ],
         "Trades": [
             {
@@ -39,18 +37,6 @@
                 "Ort. Maliyet": 184.20,
                 "Adet": 118
             },
-            {
-                "Hisse": "EKOS",
-                "Alım Tarihi": "2023-11-15",
-                "Ort. Maliyet": 12.77,
-                "Adet": 18
-            },
-            {
-                "Hisse": "BINHO",
-                "Alım Tarihi": "2023-11-15",
-                "Ort. Maliyet": 125,
-                "Adet": 3
-            }
         ]
     }
 }
