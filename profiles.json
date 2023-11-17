@@ -28,28 +28,28 @@
     },
     "Hakan": {
         "AccessibleStocks": [
-            "KERVN",
-            "THYAO",
-            "DZGYO"
+            "TABGD",
+            "EKOS",
+            "BINHO"
         ],
         "Trades": [
             {
-                "Hisse": "KERVN",
-                "Alım Tarihi": "2023-03-01",
-                "Ort. Maliyet": 35,
-                "Adet": 75
+                "Hisse": "TABGD",
+                "Alım Tarihi": "2023-10-31",
+                "Ort. Maliyet": 184.20,
+                "Adet": 118
             },
             {
-                "Hisse": "THYAO",
-                "Alım Tarihi": "2023-04-01",
-                "Ort. Maliyet": 45,
-                "Adet": 60
+                "Hisse": "EKOS",
+                "Alım Tarihi": "2023-11-15",
+                "Ort. Maliyet": 12.77,
+                "Adet": 18
             },
             {
-                "Hisse": "DZGYO",
-                "Alım Tarihi": "2023-11-17",
-                "Ort. Maliyet": 0.02,
-                "Adet": 4
+                "Hisse": "BINHO",
+                "Alım Tarihi": "2023-11-15",
+                "Ort. Maliyet": 125,
+                "Adet": 3
             }
         ]
     }
